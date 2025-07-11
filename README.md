@@ -263,7 +263,7 @@ This project is licensed under the MIT License - see the LICENSE file for detail
 
 - [Frappe Framework](https://frappeframework.com/)
 - [ERPNext](https://erpnext.com/)
-- [Virtuozzo Application Platform](https://virtuozzo.com/application-platform/)
+- [Virtuozzo PaaS Cloud Hosting](https://www.virtuozzo.com/paas-cloud-hosting/)
 
 ## 📞 Support
 
