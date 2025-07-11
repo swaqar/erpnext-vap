@@ -1,0 +1,72 @@
+{
+  "type": "install",
+  "name": "ERPNext Multi-Site Deployment",
+  "description": "Deploy ERPNext with MariaDB, optional Redis, and NGINX as reverse proxy (SSL-enabled).",
+  "logo": "https://raw.githubusercontent.com/frappe/design/master/logos/logos/frappe/frappe-logo.svg",
+  "nodes": [
+    {
+      "nodeGroup": "db",
+      "nodeType": "mysql",
+      "count": 1,
+      "cloudlets": 8,
+      "displayName": "MariaDB",
+      "env": {
+        "MYSQL_ROOT_PASSWORD": "${fn.password}",
+        "MYSQL_DATABASE": "erpnext",
+        "MYSQL_USER": "frappe",
+        "MYSQL_PASSWORD": "${fn.password}"
+      }
+    },
+    {
+      "nodeGroup": "redis",
+      "nodeType": "redis",
+      "count": 1,
+      "cloudlets": 4,
+      "displayName": "Redis Cache"
+    },
+    {
+      "nodeGroup": "app",
+      "nodeType": "docker",
+      "image": "swaqar/erpnext-hardened:latest",
+      "count": 1,
+      "cloudlets": 16,
+      "displayName": "ERPNext App",
+      "links": [
+        "db:DB",
+        "redis:REDIS"
+      ],
+      "env": [
+        { "name": "SITE_NAME", "value": "${env.name}.local" },
+        { "name": "ADMIN_PASSWORD", "value": "admin" },
+        { "name": "DB_HOST", "value": "${nodes.db[0].host}" },
+        { "name": "DB_PORT", "value": "3306" },
+        { "name": "DB_USER", "value": "root" },
+        { "name": "DB_PASSWORD", "value": "${fn.password}" },
+        { "name": "REDIS_HOST", "value": "${nodes.redis[0].host}" },
+        { "name": "REDIS_PORT", "value": "6379" },
+        { "name": "FRAPPE_USER", "value": "frappe" }
+      ],
+      "volumes": [
+        "/home/frappe/frappe-bench/sites"
+      ],
+      "ports": [
+        { "port": 8000, "protocol": "TCP" },
+        { "port": 9000, "protocol": "TCP" }
+      ]
+    },
+    {
+      "nodeGroup": "nginx",
+      "nodeType": "nginx",
+      "count": 1,
+      "cloudlets": 8,
+      "displayName": "NGINX Proxy",
+      "links": [
+        "app:APP"
+      ],
+      "env": {},
+      "startService": true,
+      "volumeMounts": ["/etc/nginx"]
+    }
+  ],
+  "startPage": "https://${env.domain}"
+}
