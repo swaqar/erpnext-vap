@@ -1,7 +1,19 @@
-FROM python:3.10-slim-bullseye
+FROM ubuntu:22.04
 
 LABEL maintainer="swaqar <your-email@example.com>"
 LABEL description="Minimal ERPNext image for production use with Virtuozzo VAP"
+LABEL org.opencontainers.image.os="linux"
+LABEL org.opencontainers.image.architecture="amd64"
+LABEL org.opencontainers.image.vendor="Virtuozzo VAP"
+LABEL org.opencontainers.image.title="ERPNext Hardened"
+LABEL org.opencontainers.image.description="Production-ready ERPNext for Virtuozzo Application Platform"
+LABEL org.opencontainers.image.version="1.0.1"
+LABEL org.opencontainers.image.created="2024-01-01T00:00:00Z"
+LABEL org.opencontainers.image.revision="v1.0.1"
+LABEL org.opencontainers.image.source="https://github.com/sydwaq/erpnext-vap-git"
+LABEL com.virtuozzo.vap.os="ubuntu"
+LABEL com.virtuozzo.vap.os.version="22.04"
+LABEL com.virtuozzo.vap.arch="amd64"
 
 # Set environment variables
 ENV DEBIAN_FRONTEND=noninteractive \
@@ -9,9 +21,13 @@ ENV DEBIAN_FRONTEND=noninteractive \
     LC_ALL=C.UTF-8 \
     PATH=/home/frappe/.local/bin:$PATH
 
-# Install minimal runtime dependencies
+# Install Python 3.10 and minimal runtime dependencies
 RUN apt-get update && \
     apt-get install -y --no-install-recommends \
+        python3.10 \
+        python3.10-dev \
+        python3.10-venv \
+        python3-pip \
         curl \
         wget \
         gnupg \
@@ -20,9 +36,7 @@ RUN apt-get update && \
         mariadb-client \
         redis-server \
         redis-tools \
-        curl \
         ca-certificates \
-        gnupg \
         lsb-release \
         cron \
         supervisor \
@@ -37,6 +51,10 @@ RUN apt-get update && \
     apt-get autoremove -y && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
+
+# Create symlink for python3.10
+RUN ln -sf /usr/bin/python3.10 /usr/bin/python3 && \
+    ln -sf /usr/bin/python3.10 /usr/bin/python
 
 # Install Node.js 18+ (required for Frappe framework)
 RUN curl -fsSL https://deb.nodesource.com/setup_18.x | bash - && \

@@ -27,10 +27,12 @@
     {
       "nodeGroup": "app",
       "nodeType": "docker",
-      "image": "swaqar/erpnext-hardened:latest",
+      "image": "sydwaq/erpnext-hardened:v1.0.1",
       "count": 1,
       "cloudlets": 16,
       "displayName": "ERPNext App",
+      "os": "linux",
+      "architecture": "amd64",
       "links": [
         "db:DB",
         "redis:REDIS"
@@ -65,7 +67,15 @@
       ],
       "env": {},
       "startService": true,
-      "volumeMounts": ["/etc/nginx"]
+      "volumeMounts": ["/etc/nginx"],
+      "configs": [
+        {
+          "name": "erpnext-nginx",
+          "type": "file",
+          "path": "/etc/nginx/conf.d/erp.conf",
+          "content": "server {\n    listen 443 ssl;\n    server_name ${env.domain};\n\n    ssl_certificate /etc/letsencrypt/live/${env.domain}/fullchain.pem;\n    ssl_certificate_key /etc/letsencrypt/live/${env.domain}/privkey.pem;\n\n    location / {\n        proxy_pass http://erp-app:8000;\n        proxy_set_header Host $host;\n        proxy_set_header X-Real-IP $remote_addr;\n        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;\n        proxy_set_header X-Forwarded-Proto $scheme;\n    }\n}\n\n# Optional: redirect HTTP to HTTPS\nserver {\n    listen 80;\n    server_name ${env.domain};\n    return 301 https://$host$request_uri;\n}"
+        }
+      ]
     }
   ],
   "startPage": "https://${env.domain}"

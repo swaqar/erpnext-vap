@@ -86,7 +86,7 @@ services:
       - "6379:6379"
 
   erpnext:
-    image: swaqar/erpnext-hardened:latest
+    image: sydwaq/erpnext-hardened:v1.0.1
     environment:
       SITE_NAME: ${ENV_NAME:-mysite.local}
       ADMIN_PASSWORD: admin
@@ -132,7 +132,7 @@ volumes:
 
 ```bash
 # 1. Pull the image
-docker pull swaqar/erpnext-hardened:latest
+docker pull sydwaq/erpnext-hardened:v1.0.1
 
 # 2. Run the container
 docker run -d \
@@ -144,7 +144,7 @@ docker run -d \
   -e DB_HOST=your_db_host \
   -e DB_PASSWORD=your_db_password \
   -e REDIS_HOST=your_redis_host \
-  swaqar/erpnext-hardened:latest
+  sydwaq/erpnext-hardened:v1.0.1
 ```
 
 ## ⚙️ Environment Variables
@@ -179,6 +179,32 @@ For production deployments:
 1. Obtain SSL certificates (Let's Encrypt recommended)
 2. Update NGINX configuration with certificate paths
 3. Configure domain in ERPNext site settings
+
+## 🏷️ Versioning
+
+This project uses semantic versioning for Docker images:
+
+- **Latest**: `sydwaq/erpnext-hardened:latest` - Always points to the most recent stable version
+- **Versioned**: `sydwaq/erpnext-hardened:v1.0.1` - Specific version for production stability
+
+### Current Version: v1.0.1
+- Ubuntu 22.04 base image
+- Python 3.10 runtime
+- Node.js 18+ for Frappe framework
+- ERPNext version-15 branch
+- Enhanced OS detection labels for VAP compatibility
+
+### Updating Images
+When deploying to VAP, use versioned tags to ensure you get the latest image:
+```bash
+# Build new version
+docker build -t sydwaq/erpnext-hardened:v1.0.2 .
+
+# Push to registry
+docker push sydwaq/erpnext-hardened:v1.0.2
+
+# Update JPS manifest with new version
+```
 
 ## 📊 Monitoring and Maintenance
 
