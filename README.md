@@ -10,7 +10,7 @@ A production-ready ERPNext deployment solution with Docker containerization, mul
 - **Database Integration**: MariaDB/MySQL database support
 - **Redis Caching**: Optional Redis integration for improved performance
 - **NGINX Reverse Proxy**: SSL-enabled reverse proxy configuration
-- **Cloud Deployment**: JPS (Jelastic Platform Script) for cloud deployment
+- **Cloud Deployment**: JPS (Virtuozzo Application Platform Script) for cloud deployment
 - **Environment Configuration**: Flexible environment variable configuration
 
 ## 📁 Project Structure
@@ -42,7 +42,7 @@ erpnext-vap-git/
 - Handles environment variable configuration
 
 ### 3. JPS Configuration
-- Multi-node deployment setup
+- Multi-node deployment setup for Virtuozzo Application Platform
 - MariaDB database node
 - Redis cache node
 - ERPNext application node
@@ -119,9 +119,9 @@ volumes:
   erpnext_sites:
 ```
 
-### Option 2: Cloud Deployment (Jelastic)
+### Option 2: Cloud Deployment (Virtuozzo Application Platform)
 
-1. **Upload JPS File**: Upload `jps/erpnext-multisite.jps` to your Jelastic environment
+1. **Upload JPS File**: Upload `jps/erpnext-multisite.jps` to your Virtuozzo Application Platform environment
 2. **Deploy**: Execute the JPS script with your domain and credentials
 3. **Access**: Navigate to your domain to access ERPNext
 
@@ -263,7 +263,7 @@ This project is licensed under the MIT License - see the LICENSE file for detail
 
 - [Frappe Framework](https://frappeframework.com/)
 - [ERPNext](https://erpnext.com/)
-- [Jelastic Platform](https://jelastic.com/)
+- [Virtuozzo Application Platform](https://virtuozzo.com/application-platform/)
 
 ## 📞 Support
 
