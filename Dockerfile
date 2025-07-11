@@ -18,23 +18,30 @@ RUN apt-get update && \
         git \
         build-essential \
         mariadb-client \
+        redis-server \
         redis-tools \
-        nodejs \
-        npm \
-        yarn \
+        curl \
+        ca-certificates \
+        gnupg \
+        lsb-release \
+        cron \
         supervisor \
         nginx \
         libffi-dev \
         libssl-dev \
         libjpeg-dev \
         zlib1g-dev \
-        libmysqlclient-dev \
+        libmariadb-dev \
         libpq-dev \
         libwebp-dev && \
-    npm install -g yarn && \
     apt-get autoremove -y && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
+
+# Install Node.js 18+ (required for Frappe framework)
+RUN curl -fsSL https://deb.nodesource.com/setup_18.x | bash - && \
+    apt-get install -y nodejs && \
+    npm install -g yarn
 
 # Create user and set permissions
 RUN useradd -ms /bin/bash frappe && \
@@ -44,8 +51,8 @@ RUN useradd -ms /bin/bash frappe && \
 USER frappe
 WORKDIR /home/frappe
 
-# Copy bench setup and entrypoint
-COPY --chown=frappe:frappe . .
+# Copy entrypoint script
+COPY --chown=frappe:frappe entrypoint.sh /home/frappe/entrypoint.sh
 
 # Install bench CLI
 RUN pip install --no-cache-dir --user frappe-bench

@@ -220,6 +220,35 @@ docker exec erpnext bench update --apps frappe
 - Implement proper firewall rules
 - **Non-root User**: Application runs as `frappe` user for enhanced security
 
+## 🖥️ Platform Compatibility
+
+### **Current Image Architecture**
+- **Architecture**: `linux/amd64` (x86_64)
+- **Base Image**: Python 3.10 slim Debian Bullseye
+- **Size**: ~3.88GB
+- **Docker Image**: `sydwaq/erpnext-hardened:latest`
+
+### **Platform Support Matrix**
+
+| Platform | Status | Use Case | Notes |
+|----------|--------|----------|-------|
+| **AMD64 Servers** | ✅ Compatible | Production deployment, most cloud providers | Optimized for VAP deployment |
+| **ARM64 Servers** | ❌ Not Compatible | AWS Graviton, newer cloud instances | Would require multi-platform build |
+| **Apple Silicon Mac** | ⚠️ Runs via emulation | Development/testing | Slower performance due to emulation |
+
+### **Multi-Platform Build (Optional)**
+
+To build for multiple platforms (if needed):
+
+```bash
+docker buildx build \
+  --platform linux/amd64,linux/arm64 \
+  -t sydwaq/erpnext-hardened:latest \
+  --push .
+```
+
+**Note**: The current single-platform build is optimized for Virtuozzo Application Platform deployment and provides the best performance for production use.
+
 ## 🐛 Troubleshooting
 
 ### Common Issues
