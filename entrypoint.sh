@@ -37,10 +37,13 @@ fi
 echo "✅ Setting default site to $SITE_NAME"
 bench use "$SITE_NAME"
 
-echo "🚀 Enabling production mode..."
-sudo bench setup production "$FRAPPE_USER"
+echo "🚀 Setting up production mode (without internal nginx)..."
+sudo bench setup production "$FRAPPE_USER" --no-nginx
 
 echo "📌 Reloading Supervisor..."
 sudo supervisorctl reload
 
-echo "🎉 ERPNext is now set up and running in production mode!"
+echo "🎉 ERPNext site $SITE_NAME is now live and in production mode."
+
+# ⏱ Start the application
+exec bench start

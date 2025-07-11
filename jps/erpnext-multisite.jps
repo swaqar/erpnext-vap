@@ -6,7 +6,7 @@
   "nodes": [
     {
       "nodeGroup": "db",
-      "nodeType": "mysql",
+      "nodeType": "mariadb10",
       "count": 1,
       "cloudlets": 8,
       "displayName": "MariaDB",
